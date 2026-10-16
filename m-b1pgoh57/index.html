@@ -297,8 +297,8 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
   <div class="mc-h" style="display:flex;align-items:center;gap:8px">Preview <span>المعاينة — تقدر تعدّل عليها</span><button type="button" class="btn ghost sm" id="mcRe" style="margin-left:auto">↻ Rephrase · صياغة أخرى</button></div>
   <input type="text" id="mcSubj" dir="ltr">
   <textarea id="mcText" dir="ltr" rows="15"></textarea>
-  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Open in Outlook” copies the email in dark blue — just paste it (Ctrl+V) in the new email. · يفتح Outlook وينسخ الإيميل باللون الأزرق — الصقه بـ Ctrl+V</p>
-  <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Open in Outlook · افتح</button><button type="button" class="btn ghost" id="mcCopy">Copy (dark blue) · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
+  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Send” opens Outlook with the address and subject, and copies the email in dark blue — just paste it (Ctrl+V) and press Send. · يفتح Outlook بالإيميل والعنوان، والنص منسوخ باللون الأزرق — الصقه بـ Ctrl+V واضغط إرسال</p>
+  <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Send · إرسال</button><button type="button" class="btn ghost" id="mcCopy">Copy (dark blue) · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
 </div></div>
 <div class="modal" id="modal"><div class="box"><h2 id="mT"></h2><p id="mP"></p><div class="acts" id="mA"></div></div></div>
 <div class="toast" id="toast"></div>
@@ -1096,6 +1096,7 @@ const ISS = {
 const MAIL_BLUE = '#002060';
 const EM = {
   purpose: [
+    { k:'quick',  en:'Quick feedback',    ar:'طلب فيد باك سريع',     subj:'{S} – Photos & Videos for Review' },
     { k:'esc',    en:'Escalation',        ar:'تصعيد',               subj:'Escalation: {S} – Merchandising Standards' },
     { k:'space',  en:'Shelf space lost',  ar:'فقدان المساحة',        subj:'Escalation: {S} – Contracted Shelf Space' },
     { k:'repeat', en:'Second escalation', ar:'تصعيد ثاني – تكرار',    subj:'Second Escalation: {S} – Repeated Merchandising Gaps' },
@@ -1160,7 +1161,8 @@ const EM = {
     ['Urgent','عاجل','This requires your urgent attention.']
   ],
   len: [['Standard','عادي'],['Very short','مختصر جداً']],
-  greet: [['Dear Team,','الفريق'],['Dear {N},','باسم شخص'],['Dear All,','الجميع']]
+  greet: [['Hello Team,','مرحبا فريق'],['Dear Team,','الفريق'],['Dear {N},','باسم شخص'],['Dear All,','الجميع']],
+  quick: ['Kindly review the attached photos and videos of {S} and share your feedback.', 'Please review the photos and videos of {S} below and share your feedback.', 'Kindly have a look at the attached photos and videos of {S} and share your feedback.']
 };
 let MS = null;
 const P_ = () => EM.purpose[MS.p].k;
@@ -1179,7 +1181,15 @@ function buildEmail(){
   const date = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
   const link = MS.pages.length === 1 ? `${f.what}: ${base() + MS.pages[0].slug}` : [f.what + ':', ...MS.pages.map((p, i) => `${i+1}. ${base() + p.slug}`)].join('\n');
   const list = arr => arr.map((l, i) => `${i+1}. ${ISS[l] || l}`).join('\n');
-  const opener = fill(short ? EM.short[k][MS.s] : pick(EM.open[k][MS.s], v));
+  const opener = k === 'quick' ? '' : fill(short ? EM.short[k][MS.s] : pick(EM.open[k][MS.s], v));
+  if (k === 'quick'){
+    const what = f.what.toLowerCase();
+    let line = pick(EM.quick, v).replace('photos and videos', what).replace(/\{S\}/g, S);
+    if (MS.u) line = line.replace('share your feedback.', 'share your feedback urgently.');
+    const Q = [fill(EM.greet[MS.g][0]), '', line, '', link, '', 'Thank you.', '', 'Best regards,'];
+    ['sig_name','sig_title','sig_company','sig_phone'].forEach(q => { const s2 = LS.get(q).trim(); if (s2) Q.push(s2); });
+    return { s: `${MS.u ? 'URGENT – ' : ''}${fill(EM.purpose[MS.p].subj)} | ${date}`, b: Q.join('\n') };
+  }
   const L = [fill(EM.greet[MS.g][0]), '', opener, ''];
   const tone = [];
   if (x[2] && x[3]) tone.push('This is not acceptable and reflects clear and repeated negligence.');
@@ -1212,15 +1222,19 @@ function chipRow(key, items, cur, multi){
   return `<div class="mc-row" data-k="${key}">${items.map((it, i) => `<button type="button" class="mc${(multi ? cur[i] : i === cur) ? ' on' : ''}" data-i="${i}"><b>${multi ? (cur[i] ? '✓ ' : '+ ') : ''}${esc(it[0])}</b><small>${esc(it[1])}</small></button>`).join('')}</div>`;
 }
 function renderComposer(){
-  const act = isAct();
+  const act = isAct(); if (P_() === 'quick' && MS.g === undefined) MS.g = 0;
   $('mcBody').innerHTML = `
     <div class="mc-sec"><div class="mc-h">Email type <span>نوع الإيميل</span></div>${chipRow('p', EM.purpose.map(x => [x.en, x.ar]), MS.p)}</div>
-    <div class="mc-sec"><div class="mc-h">Who visited <span>مين زار المتجر</span></div>${chipRow('s', EM.src, MS.s)}</div>
-    <div class="mc-sec"><div class="mc-h">To <span>موجّه إلى</span></div>${chipRow('g', EM.greet.map(g => [g[0].replace('{N}', '[Name]'), g[1]]), MS.g)}
-      <input type="text" id="mcName" class="${MS.g === 1 ? '' : 'hidden'}" placeholder="e.g. Mr. Khalid" value="${esc(MS.name)}" dir="ltr"></div>
+    <div class="mc-sec"><div class="mc-h">Send to <span>إرسال إلى (الإيميل)</span></div>
+      <div class="mc-grid"><input type="text" id="mcTo" list="mcBook" placeholder="To: name@company.com" value="${esc(LS.get('em_to'))}" dir="ltr"><input type="text" id="mcCc" list="mcBook" placeholder="CC (optional)" value="${esc(LS.get('em_cc'))}" dir="ltr"></div>
+      <datalist id="mcBook">${JSON.parse(LS.get('em_book','[]')).map(a => `<option value="${esc(a)}">`).join('')}</datalist></div>
+    ${P_() === 'quick' ? `<div class="mc-sec"><div class="mc-h">Urgent? <span>عاجل؟ — اضغط للإضافة أو الحذف</span></div>${chipRow('u', [['Urgent','بشكل عاجل']], [MS.u], true)}</div>`
+      : `<div class="mc-sec"><div class="mc-h">Who visited <span>مين زار المتجر</span></div>${chipRow('s', EM.src, MS.s)}</div>`}
+    <div class="mc-sec"><div class="mc-h">Greeting <span>التحية</span></div>${chipRow('g', EM.greet.map(g => [g[0].replace('{N}', '[Name]'), g[1]]), MS.g)}
+      <input type="text" id="mcName" class="${MS.g === 2 ? '' : 'hidden'}" placeholder="e.g. Mr. Khalid" value="${esc(MS.name)}" dir="ltr"></div>
     ${act ? `<div class="mc-sec"><div class="mc-h">Deadline <span>المهلة</span></div>${chipRow('d', EM.deadline, MS.d)}</div>
     <div class="mc-sec"><div class="mc-h">Add lines <span>أضف جمل — اضغط للإضافة أو الحذف</span></div>${chipRow('x', EM.extra, MS.x, true)}</div>` : ''}
-    <div class="mc-sec"><div class="mc-h">Length <span>الطول</span></div>${chipRow('l', EM.len, MS.l)}</div>
+    ${P_() === 'quick' ? '' : `<div class="mc-sec"><div class="mc-h">Length <span>الطول</span></div>${chipRow('l', EM.len, MS.l)}</div>`}
     <details class="mc-sec mc-sig"${LS.get('sig_name') ? '' : ' open'}><summary>Signature <span>التوقيع (يُحفظ)</span></summary>
       <div class="mc-grid">
         <input type="text" data-sig="sig_name" placeholder="Your name" value="${esc(LS.get('sig_name'))}" dir="ltr">
@@ -1232,9 +1246,9 @@ function renderComposer(){
 }
 function openComposer(pages){
   const f = mediaFacts(pages), all = pages.flatMap(p => p.clips).flatMap(c => c.L || []);
-  const p = f.issues.includes('Space Loss') ? 1 : f.issues.length ? 0 : all.includes('Good Display') ? 3 : 0;
+  const p = 0;
   let x; try{ x = JSON.parse(LS.get('em_x', '[true,true,false,false,false,false]')); }catch(e){ x = [true,true,false,false,false,false]; }
-  MS = { pages, p, s: +LS.get('em_s', 0), g: +LS.get('em_g', 0), name: LS.get('em_name'), d: +LS.get('em_d', 1), x, l: +LS.get('em_l', 0), v: 0 };
+  MS = { pages, p, u: LS.get('em_u', '1') === '1', s: +LS.get('em_s', 0), g: +LS.get('em_g', 0), name: LS.get('em_name'), d: +LS.get('em_d', 1), x, l: +LS.get('em_l', 0), v: 0 };
   renderComposer(); $('mail').classList.add('on'); document.body.style.overflow = 'hidden';
 }
 function closeComposer(){ $('mail').classList.remove('on'); document.body.style.overflow = ''; }
@@ -1261,10 +1275,12 @@ function initComposer(){
     const b = e.target.closest('.mc'); if (!b) return;
     const k = b.parentElement.dataset.k, i = +b.dataset.i;
     if (k === 'x'){ MS.x[i] = !MS.x[i]; LS.set('em_x', JSON.stringify(MS.x)); }
+    else if (k === 'u'){ MS.u = !MS.u; LS.set('em_u', MS.u ? '1' : '0'); }
     else { MS[k] = i; MS.v = 0; if (k !== 'p') LS.set('em_' + k, i); }
-    renderComposer(); if (k === 'g' && i === 1) $('mcName').focus();
+    renderComposer(); if (k === 'g' && i === 2) $('mcName').focus();
   });
   $('mcBody').addEventListener('input', e => {
+    if (e.target.id === 'mcTo' || e.target.id === 'mcCc'){ LS.set(e.target.id === 'mcTo' ? 'em_to' : 'em_cc', e.target.value.trim()); return; }
     if (e.target.id === 'mcName'){ MS.name = e.target.value; LS.set('em_name', MS.name); }
     else if (e.target.dataset.sig) LS.set(e.target.dataset.sig, e.target.value);
     else return;
@@ -1277,7 +1293,10 @@ function initComposer(){
   $('mcOpen').onclick = async () => {
     const ok = await copyRich($('mcText').value);
     toast(ok ? 'Email copied in dark blue — paste it with Ctrl+V' : 'Opening…');
-    setTimeout(() => { location.href = `mailto:?subject=${encodeURIComponent($('mcSubj').value)}` + (ok ? '' : `&body=${encodeURIComponent($('mcText').value)}`); }, 350);
+    const to = $('mcTo').value.trim(), cc = $('mcCc').value.trim();
+    const book = JSON.parse(LS.get('em_book','[]')); (to + ',' + cc).split(/[,;\s]+/).filter(a => /@/.test(a)).forEach(a => { if (!book.includes(a)) book.unshift(a); }); LS.set('em_book', JSON.stringify(book.slice(0, 20)));
+    const q = [`subject=${encodeURIComponent($('mcSubj').value)}`]; if (cc) q.push(`cc=${encodeURIComponent(cc)}`); if (!ok) q.push(`body=${encodeURIComponent($('mcText').value)}`);
+    setTimeout(() => { location.href = `mailto:${encodeURIComponent(to).replace(/%40/g,'@').replace(/%2C/g,',')}?` + q.join('&'); }, 350);
   };
   $('mcWa').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent($('mcText').value)}`, '_blank');
   addEventListener('keydown', e => { if (e.key === 'Escape' && $('mail').classList.contains('on')) closeComposer(); });
