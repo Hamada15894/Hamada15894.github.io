@@ -130,30 +130,63 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 .clip img{cursor:pointer}
 .ed{position:fixed;inset:0;z-index:30;background:#0b1022;color:#fff;display:none;flex-direction:column}
 .ed.on{display:flex}
-.ed-bar{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
-.ed-bar b{font-size:15px;margin-right:auto}
-.ed button{font:inherit;font-size:13px;font-weight:600;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#fff;padding:7px 11px;cursor:pointer;white-space:nowrap}
-.ed button:hover{background:rgba(255,255,255,.14)}
+.ed-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.08)}
+.ed-bar b{flex:1;font-size:15px;text-align:center}
+.ed button{font:inherit;color:#fff;cursor:pointer;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);padding:6px 12px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;white-space:nowrap;min-height:46px;flex:none}
+.ed button b{font-size:13.5px;font-weight:700}
+.ed button small{font-size:11px;color:#aab3cf;font-weight:500;margin-top:2px}
+.ed button.on small{color:#fff}
+.ed button:hover{background:rgba(255,255,255,.12)}
 .ed button:disabled{opacity:.35;cursor:default}
 .ed button.on{background:#2a5bea;border-color:#2a5bea}
-.ed #edDone{background:#2a5bea;border-color:#2a5bea;padding:7px 18px}
-.ed-row{display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;align-items:center}
-.ed .seg{display:flex;gap:4px;background:rgba(255,255,255,.05);padding:3px;border-radius:11px}
-.ed .seg button{border-color:transparent;background:transparent}
-.ed .seg button.on{background:#2a5bea}
-.ed #edColors button{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
-.ed #edColors button.on{outline:3px solid #fff;outline-offset:1px;background:inherit}
-.ed-labels{padding-top:0}
-.ed-labels button.on{background:#ff2a2a;border-color:#ff2a2a}
+.ed #edCancel{min-width:46px;font-size:18px}
+.ed #edDone{background:#2a5bea;border-color:#2a5bea;flex-direction:row;gap:6px;font-weight:700;padding:8px 18px}
+.ed #edDone small{color:#dfe6ff;margin:0}
 .ed-area{flex:1;position:relative;display:grid;place-items:center;min-height:0;overflow:hidden;background:#05070f}
 .ed-box{position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.12)}
 .ed-box canvas{position:absolute;inset:0;width:100%;height:100%}
 .ed-box video{position:absolute;left:50%;top:50%;object-fit:fill;pointer-events:none}
 .ed-box svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
-.ed-foot{display:flex;gap:14px;align-items:center;padding:10px 14px;border-top:1px solid rgba(255,255,255,.08);flex-wrap:wrap;font-size:13px;color:#aab3cf}
-.ed-foot #edHint{flex:1;min-width:200px}
-#edScrub{display:flex;align-items:center;gap:8px;flex:1;min-width:220px}
+.ed-panel{background:#0e1430;border-top:1px solid rgba(255,255,255,.08);padding:4px 0 calc(8px + env(safe-area-inset-bottom))}
+.ed-step{font-size:12.5px;color:#e6eaf7;padding:6px 12px 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-weight:600}
+.ed-step i{font-style:normal;width:20px;height:20px;border-radius:50%;background:#2a5bea;display:grid;place-items:center;font-size:11px}
+.ed-step span{color:#8f99ba;font-weight:400}
+.ed-chips{display:flex;gap:6px;overflow-x:auto;padding:2px 12px 6px;scrollbar-width:none;align-items:center}
+.ed-chips::-webkit-scrollbar{display:none}
+.ed .seg{display:flex;gap:3px;background:rgba(255,255,255,.04);padding:3px;border-radius:14px;flex:none}
+.ed .seg button{border-color:transparent;background:transparent}
+.ed .seg button.on{background:#2a5bea}
+#edLabels button.on{background:#ff2a2a;border-color:#ff2a2a}
+.ed #edColors button{width:34px;min-height:34px;height:34px;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.ed #edColors button.on{outline:3px solid #fff;outline-offset:1px}
+.ed-foot{display:flex;gap:12px;align-items:center;padding:2px 12px 0;flex-wrap:wrap;font-size:12.5px;color:#aab3cf}
+#edHint{flex:1;min-width:200px}
+#edScrub{display:flex;align-items:center;gap:8px;flex:1;min-width:200px}
 #edScrub input{flex:1}
+.ar{font-weight:400;color:var(--ink2);font-size:12px;margin-inline-start:6px}
+.msheet{position:fixed;inset:0;z-index:25;background:rgba(10,18,48,.5);display:none;justify-content:center;align-items:flex-end}
+.msheet.on{display:flex}
+.mbox{background:#fff;width:100%;max-width:760px;max-height:100%;overflow:auto;border-radius:20px 20px 0 0;padding:0 18px}
+@media(min-width:760px){.msheet{align-items:center;padding:20px}.mbox{border-radius:20px;max-height:94vh}}
+.mtop{position:sticky;top:0;background:#fff;display:flex;align-items:center;padding:16px 0 8px;z-index:2}
+.mtop b{flex:1;font-size:17px}.mtop b span{font-weight:400;color:var(--ink2);font-size:13px;margin-left:6px}
+.mtop button{border:0;background:#f1f3f8;width:38px;height:38px;border-radius:50%;font-size:16px;cursor:pointer}
+.mc-h{font-weight:700;font-size:13px;margin:14px 0 8px}.mc-h span{font-weight:400;color:var(--ink2);margin-left:6px}
+.mc-row{display:flex;gap:8px;flex-wrap:wrap}
+.mc{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;font:inherit;color:var(--ink);line-height:1.35}
+.mc b{font-size:13.5px;font-weight:600}.mc small{font-size:11.5px;color:var(--ink2)}
+.mc.on{border-color:var(--accent);background:var(--accent2)}.mc.on b{color:#1d3fae}
+.mc.long{flex:1 1 100%}
+#mcName{margin-top:8px}
+.mc-sig summary{font-weight:700;font-size:13px;cursor:pointer;margin:16px 0 8px}.mc-sig summary span{font-weight:400;color:var(--ink2);margin-left:6px}
+.mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.mc-grid{grid-template-columns:1fr}}
+.mc-grid input,#mcSubj{padding:10px 12px}
+#mcSubj{margin-bottom:8px;font-weight:600}
+#mcText{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;font:13.5px/1.55 "Segoe UI",Arial,sans-serif;resize:vertical;color:var(--ink);outline:none}
+#mcText:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
+.mc-acts{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:#fff;padding:12px 0 calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:12px}
+.mc-acts .btn{flex:1;min-width:140px}
 .modal{position:fixed;inset:0;background:rgba(10,18,48,.45);display:none;place-items:center;padding:16px;z-index:10}
 .modal.on{display:grid}
 .modal .box{background:#fff;border-radius:18px;padding:22px;max-width:400px;width:100%}
@@ -194,12 +227,13 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
     </div>
     <label class="l" style="margin-top:14px">Footer text on the page <span class="hint">(optional)</span></label>
     <input type="text" id="org" placeholder="Modern Trade – Northern Region">
+    <p class="hint" id="phoneLink" style="margin:10px 0 0;direction:ltr;word-break:break-all;color:var(--ink2);font-size:12.5px"></p>
     <button class="btn big" id="btnSetup" type="button">Save</button>
     <div class="alert" id="setupMsg"></div>
   </section>
 
   <section class="card hidden" id="upCard">
-    <label class="l" for="store">Store name</label>
+    <label class="l" for="store">Store name <span class="ar">اسم المتجر</span></label>
     <input type="text" id="store" placeholder="Othaim 56" autocomplete="off">
     <div class="preview" id="preview"></div>
     <div id="slugEdit"><span id="basePrefix"></span><input type="text" id="slug"></div>
@@ -207,7 +241,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
     <div class="drop" id="drop">
       <input type="file" id="file" accept="video/*,image/*" multiple="">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2a5bea" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M20 16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3"></path></svg>
-      <b>Attach videos or photos</b>
+      <b>Attach videos or photos <span class="ar">أرفق فيديو أو صور</span></b>
       <small>One or more · MP4 video or JPG / PNG photos</small>
       <div class="tip">For best quality, upload the original from your phone gallery, not from WhatsApp</div>
     </div>
@@ -215,16 +249,16 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 
     <div class="opts">
       <label class="tog"><input type="checkbox" id="enh" checked=""><span class="sw"></span>
-        <span><b>✨ Enhance quality</b><small>Photos: sharpen, upscale and colour-correct · Videos: full original quality with colour and clarity tuning on playback</small></span></label>
+        <span><b>✨ Enhance quality <span class="ar">تحسين الجودة</span></b><small>Photos: sharpen, upscale and colour-correct · Videos: full original quality with colour and clarity tuning on playback</small></span></label>
     </div>
 
     <div class="mode" id="mode">
       <label class="opt"><input type="radio" name="mode" value="playlist" checked="">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h12M3 12h12M3 18h8"></path><path d="M17 15l5 3-5 3z" fill="currentColor"></path></svg></span>
-        <span><b>One link for all</b><small>All files on one link, playing one after another</small></span></label>
+        <span><b>One link for all <span class="ar">رابط واحد</span></b><small>All files on one link, playing one after another</small></span></label>
       <label class="opt"><input type="radio" name="mode" value="single">
         <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg></span>
-        <span><b>A link per file</b><small>Each video or photo gets its own link</small></span></label>
+        <span><b>A link per file <span class="ar">رابط لكل ملف</span></b><small>Each video or photo gets its own link</small></span></label>
     </div>
 
     <div class="alert" id="upMsg"></div>
@@ -242,18 +276,29 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 </main>
 
 <div class="ed" id="ed">
-  <div class="ed-bar"><b id="edTitle">Mark issues</b>
-    <button type="button" id="edRotL" title="Rotate left">⟲ Rotate</button><button type="button" id="edRotR" title="Rotate right">⟳</button>
-    <button type="button" id="edUndo">Undo</button><button type="button" id="edClear">Clear</button>
-    <button type="button" id="edCancel">Cancel</button><button type="button" id="edDone">Done</button></div>
-  <div class="ed-row">
-    <div class="seg" id="edTools"><button type="button" data-tool="ell">◯ Circle</button><button type="button" data-tool="box">▭ Box</button><button type="button" data-tool="arr">➜ Arrow</button><button type="button" data-tool="txt">T Label</button></div>
-    <div class="seg" id="edColors"><button type="button" data-col="red" style="background:#ff2a2a" title="Red"></button><button type="button" data-col="yellow" style="background:#ffd400" title="Yellow"></button><button type="button" data-col="white" style="background:#fff" title="White"></button></div>
-  </div>
-  <div class="ed-row ed-labels" id="edLabels"></div>
+  <div class="ed-bar"><button type="button" id="edCancel" title="Cancel">✕</button><b id="edTitle">Mark issues</b><button type="button" id="edUndo" title="Undo"><b>↶</b><small>تراجع</small></button><button type="button" id="edDone">Done <small>تم</small></button></div>
   <div class="ed-area" id="edArea"><div class="ed-box" id="edBox"><svg id="edSvg" xmlns="http://www.w3.org/2000/svg"></svg></div></div>
-  <div class="ed-foot"><span id="edHint"></span><div id="edScrub" class="hidden"><span>Frame</span><input type="range" id="edRange" min="0" step="0.05" value="0"></div></div>
+  <div class="ed-panel">
+    <div class="ed-step"><i>1</i>Choose the issue <span>اختر نوع الملاحظة</span></div>
+    <div class="ed-chips" id="edLabels"></div>
+    <div class="ed-step"><i>2</i>Draw around it <span>ارسم حولها — السهم والكلمة تنضاف تلقائياً</span></div>
+    <div class="ed-chips">
+      <div class="seg" id="edTools"><button type="button" data-tool="ell"><b>◯ Circle</b><small>دائرة</small></button><button type="button" data-tool="box"><b>▭ Box</b><small>مربع</small></button><button type="button" data-tool="arr"><b>➜ Arrow</b><small>سهم</small></button><button type="button" data-tool="txt"><b>T Text</b><small>كتابة</small></button></div>
+      <div class="seg" id="edColors"><button type="button" data-col="red" style="background:#ff2a2a" title="Red"></button><button type="button" data-col="yellow" style="background:#ffd400" title="Yellow"></button><button type="button" data-col="green" style="background:#19c37d" title="Green"></button><button type="button" data-col="white" style="background:#fff" title="White"></button></div>
+      <button type="button" id="edRotR"><b>⟳ Rotate</b><small>تدوير</small></button>
+      <button type="button" id="edClear"><b>✕ Clear</b><small>مسح الكل</small></button>
+    </div>
+    <div class="ed-foot"><span id="edHint"></span><div id="edScrub" class="hidden"><span>Frame <small>اللقطة</small></span><input type="range" id="edRange" min="0" step="0.05" value="0"></div></div>
+  </div>
 </div>
+<div class="msheet" id="mail"><div class="mbox">
+  <div class="mtop"><b>Email<span>كتابة الإيميل</span></b><button type="button" id="mcClose" title="Close">✕</button></div>
+  <div id="mcBody"></div>
+  <div class="mc-h">Preview <span>المعاينة — تقدر تعدّل عليها</span></div>
+  <input type="text" id="mcSubj" dir="ltr">
+  <textarea id="mcText" dir="ltr" rows="15"></textarea>
+  <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Open in Outlook / Mail</button><button type="button" class="btn ghost" id="mcCopy">Copy email · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
+</div></div>
 <div class="modal" id="modal"><div class="box"><h2 id="mT"></h2><p id="mP"></p><div class="acts" id="mA"></div></div></div>
 <div class="toast" id="toast"></div>
 
@@ -265,7 +310,7 @@ const $ = id => document.getElementById(id);
 const MAX_VMB = 75, MAX_IMB = 30, SITE_LIMIT = 1024 ** 3;
 const mem = {};
 const LS = { get:(k,d='')=>{ try{ return localStorage.getItem('vl_'+k) ?? d }catch(e){ return mem[k] ?? d } }, set:(k,v)=>{ try{ localStorage.setItem('vl_'+k,v) }catch(e){ mem[k]=v } } };
-let cfg = { token: LS.get('token') || embTok(), repo: LS.get('repo','v'), branch: LS.get('branch','main'), owner: LS.get('owner'), org: LS.get('org'), domain: LS.get('domain') };
+let cfg = { token: LS.get('token') || embTok(), repo: LS.get('repo','v'), branch: LS.get('branch','main'), app: LS.get('app'), owner: LS.get('owner'), org: LS.get('org'), domain: LS.get('domain') };
 let manifest = { pages: [] };
 let clips = []; // {file, kind:'v'|'i', thumb, thumbUrl, w, h, dur, ready, ok}
 let slugTouched = false, busy = false;
@@ -367,7 +412,9 @@ async function setup(){
     }
     await loadManifest();
     const ours = !exists || await fileExists('videos.json'); // never overwrite an existing website's home page
-    const entries = [ { path:'app/index.html', sha: await textBlob(SELF_HTML) }, await saveManifest() ];
+    if (!cfg.app) cfg.app = 'm-' + Math.random().toString(36).slice(2, 10);
+    const entries = [ { path: cfg.app + '/index.html', sha: await textBlob(SELF_HTML) }, await saveManifest() ];
+    if (await fileExists('app/index.html')) entries.push({ path:'app/index.html', sha:null });
     if (ours) entries.push(
       { path:'index.html', sha: await textBlob(plainPage('Store media', 'Please open the full link you received.')) },
       { path:'404.html', sha: await textBlob(plainPage('Link not found', 'Check the link or ask for a new one.')) },
@@ -380,7 +427,7 @@ async function setup(){
     if (!pages){ try{ await gh(R()+'/pages', {method:'POST', body:{ source:{ branch:BR(), path:'/' } }}) }catch(e2){ if (e2.status !== 409) throw e2; } }
     if ((pages?.cname || '') !== newDomain){ try{ await gh(R()+'/pages', {method:'PUT', body:{ cname: newDomain || null }}) }catch(e){ console.warn(e); } }
     cfg.domain = newDomain;
-    ['token','repo','branch','owner','org','domain'].forEach(k => LS.set(k, cfg[k])); msg('upMsg');
+    ['token','repo','branch','owner','org','domain','app'].forEach(k => LS.set(k, cfg[k])); msg('upMsg');
     LS.set('https_ok', '');
     $('setupCard').classList.add('hidden');
     showApp(); toast('Saved ✓');
@@ -515,7 +562,7 @@ function pageHTML(p){
   const items = p.clips.map(c => {
     const t = c.t || 'v', r = c.r || 0, w = c.w || 9, h = c.h || 16;
     return { t, f: c.f + '?v=' + p.ver, p: c.p ? c.p + '?v=' + p.ver : '', d: c.dur || 0, w, h, r, a: c.a || '',
-             W: t === 'v' && r % 180 ? h : w, H: t === 'v' && r % 180 ? w : h, m: c.m || 0 };
+             W: t === 'v' && r % 180 ? h : w, H: t === 'v' && r % 180 ? w : h, m: c.m || 0, L: c.L || [] };
   });
   const nV = items.filter(i => i.t === 'v').length, nI = items.length - nV, N = items.length, first = items[0];
   const total = items.reduce((a,c) => a + c.d, 0);
@@ -533,7 +580,6 @@ function pageHTML(p){
   <section class="card" id="m${i+1}" data-w="${c.W}" data-h="${c.H}">
     <div class="ch">
       <span class="tag ${c.t}">${c.t === 'v' ? icV : icI}${labels[i]}</span>
-      ${c.a || c.m ? '<span class="flag">● Issues marked</span>' : ''}
       <span class="num">${i+1} / ${N}</span>
       ${c.t === 'v' && c.d ? `<span class="dur">${dl(c.d)}</span>` : ''}
     </div>
@@ -545,15 +591,11 @@ function pageHTML(p){
       </div>
       ${c.t === 'v' ? `<div class="vc"><button type="button" data-a="play" class="pl">${icV}</button><input type="range" min="0" max="1000" value="0" class="sk" aria-label="Seek"><span class="tm">0:00${c.d ? ' / ' + dl(c.d) : ''}</span><button type="button" data-a="mute" class="mu" title="Sound">🔊</button></div>` : ''}
     </div>
-    <div class="tools">
-      <button type="button" data-a="out" title="Zoom out">−</button><span class="z">100%</span><button type="button" data-a="in" title="Zoom in">+</button>
-      <button type="button" data-a="rot" title="Rotate">⟳ Rotate</button><button type="button" data-a="fit" title="Reset">Reset</button>
-      <button type="button" data-a="max" class="mx" title="Close">✕ Close</button>
-    </div>
     <div class="cf">
-      <button type="button" data-a="max">⤢ Full screen</button>
-      <a href="${c.f}" target="_blank" rel="noopener">Open</a>
-      <a href="${c.f}" download="${esc(p.slug)}-${i+1}.${c.t === 'v' ? 'mp4' : (c.f.split('?')[0].split('.').pop())}">Download</a>
+      ${c.L.length ? `<span class="iss"><i></i>${c.L.map(esc).join(' · ')}</span>` : '<span class="sp"></span>'}
+      <div class="tools">
+        <button type="button" data-a="out" title="Zoom out">−</button><button type="button" data-a="in" title="Zoom in">+</button><button type="button" data-a="rot" title="Rotate">⟳</button><button type="button" data-a="fit" class="fit" title="Reset">↺</button><button type="button" data-a="max" class="fs" title="Full screen">⤢</button><a href="${c.f}" download="${esc(p.slug)}-${i+1}.${c.t === 'v' ? 'mp4' : (c.f.split('?')[0].split('.').pop())}" title="Download">⤓</a><button type="button" data-a="max" class="mx" title="Close">✕</button>
+      </div>
     </div>
   </section>`;
   return `<!doctype html>
@@ -590,7 +632,6 @@ h1{margin:8px 0 4px;font-size:clamp(26px,4vw,36px);line-height:1.15;font-weight:
 .tag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:4px 10px 4px 9px;border-radius:99px}
 .tag.v{background:rgba(42,91,234,.18);color:#9db4ff}
 .tag.i{background:rgba(16,185,129,.15);color:#6ee7b7}
-.flag{font-size:11.5px;font-weight:700;color:#ff8a8a;background:rgba(255,42,42,.12);border-radius:99px;padding:3px 9px}
 .num{margin-left:auto;font-size:12px;color:#7f89ab;font-weight:600}
 .dur{font-size:12px;color:#cfd6ee;background:rgba(255,255,255,.07);border-radius:6px;padding:1px 7px}
 .media{position:relative;background:#000;overflow:hidden;margin:0 auto;touch-action:pan-y;user-select:none;-webkit-user-select:none}
@@ -606,23 +647,22 @@ ${p.enh ? '.vrot video{filter:contrast(1.07) saturate(1.16) brightness(1.03)}' :
 .big svg{width:26px;height:26px;margin-left:3px}
 .big:hover{background:rgba(42,91,234,.85)}
 .playing .big{opacity:0;pointer-events:none}
-.tools{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 10px 0}
-.card.maxed .tools{position:absolute;top:12px;right:12px;z-index:60;background:rgba(10,15,35,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:12px;padding:3px}
-.tools .mx{display:none}.card.maxed .tools .mx{display:inline-block}
-.tools button{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#fff;min-width:34px;height:32px;border-radius:9px;cursor:pointer;font-size:15px;font-weight:700;padding:0 9px}
-.card.maxed .tools button{background:none;border-color:transparent}
-.tools button[data-a=fit],.tools button[data-a=rot],.tools .mx{font-size:12.5px;font-weight:600}
-.tools button:hover{background:rgba(255,255,255,.15)}
-.tools .z{font-size:11.5px;color:#cfd6ee;min-width:40px;text-align:center;font-weight:600}
 .vc{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:8px;padding:22px 10px 8px;background:linear-gradient(transparent,rgba(0,0,0,.75));z-index:3}
 .vc button{background:none;border:0;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;display:grid;place-items:center;font-size:15px}
 .vc button:hover{background:rgba(255,255,255,.15)}
 .vc .sk{flex:1;accent-color:#4f7cff;height:4px;cursor:pointer}
 .vc .tm{font-size:12px;color:#dfe5f7;white-space:nowrap;font-variant-numeric:tabular-nums}
-.cf{display:flex;gap:6px;padding:10px 12px;border-top:1px solid rgba(255,255,255,.06)}
-.cf button,.cf a{flex:1;text-align:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#dfe5f7;border-radius:10px;padding:8px 6px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:.15s}
-.cf button:hover,.cf a:hover{background:rgba(255,255,255,.11);color:#fff}
-.hint{text-align:center;color:#6f7aa0;font-size:12px;padding:0 16px}
+.cf{display:flex;align-items:center;gap:8px;padding:8px 10px 8px 14px;border-top:1px solid rgba(255,255,255,.06);min-height:48px}
+.cf .sp{flex:1}
+.iss{flex:1;display:flex;align-items:center;gap:7px;color:#ffb4b4;font-size:13px;font-weight:600;line-height:1.3}
+.iss i{width:8px;height:8px;border-radius:50%;background:#ff2a2a;flex:none}
+.tools{display:flex;align-items:center;gap:1px;flex:none}
+.tools button,.tools a{background:none;border:0;color:#9aa3c2;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:17px;display:grid;place-items:center;text-decoration:none;line-height:1}
+.tools button:hover,.tools a:hover{background:rgba(255,255,255,.08);color:#fff}
+.tools .mx{display:none}
+.card.maxed .tools{position:absolute;top:12px;right:12px;z-index:60;background:rgba(10,15,35,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:12px;padding:3px}
+.card.maxed .tools button,.card.maxed .tools a{color:#fff}
+.card.maxed .tools .mx{display:grid}.card.maxed .tools .fs{display:none}
 footer{text-align:center;color:#5f6a8f;font-size:12px;padding:10px 16px 28px}
 @media(max-width:560px){.hd{padding:22px 16px 4px}.grid{padding:16px;gap:16px}.jump-in{padding:10px 16px}}
 </style>
@@ -636,7 +676,6 @@ footer{text-align:center;color:#5f6a8f;font-size:12px;padding:10px 16px 28px}
 ${N > 1 ? `<nav class="jump"><div class="jump-in">${items.map((c,i) => `<a href="#m${i+1}">${c.t === 'v' ? icV : icI}${labels[i]}</a>`).join('')}</div></nav>` : ''}
 <main class="grid">${items.map(card).join('')}
 </main>
-<p class="hint">Tip: use + / − to zoom, drag to move, ⟳ to rotate, ⤢ for full screen. Pinch to zoom on phones.</p>
 ${p.org ? `<footer>${esc(p.org)}</footer>` : ''}
 <script>
 (function(){
@@ -667,7 +706,7 @@ ${p.org ? `<footer>${esc(p.org)}</footer>` : ''}
   function setMax(st,on){
     st.max=on; st.media.classList.toggle('max',on); document.body.style.overflow=on?'hidden':'';
     st.card.classList.toggle('maxed',on);
-    var tl=st.card.querySelector('.tools'); if(on) st.media.appendChild(tl); else st.card.insertBefore(tl, st.card.querySelector('.cf'));
+    var tl=st.card.querySelector('.tools'); if(on) st.media.appendChild(tl); else st.card.querySelector('.cf').appendChild(tl);
     if(on && st.media.requestFullscreen){ st.media.requestFullscreen().catch(function(){}); }
     if(!on && document.fullscreenElement){ document.exitFullscreen().catch(function(){}); }
     if(!on){ st.media.style.width=''; } layout(st);
@@ -724,9 +763,9 @@ ${p.org ? `<footer>${esc(p.org)}</footer>` : ''}
 }
 
 /* ---------- Issue marking (shared renderer) ---------- */
-const ANN_COLORS = { red:'#ff2a2a', yellow:'#ffd400', white:'#ffffff' };
-const ANN_LABELS = ['Rotation','Expiry','Not Filled','Dust','Damaged','Price Tag','Out of Stock'];
-const txtCol = c => c === ANN_COLORS.red ? '#ffffff' : '#111111';
+const ANN_COLORS = { red:'#ff2a2a', yellow:'#ffd400', green:'#19c37d', white:'#ffffff' };
+const ANN_LABELS = [['Rotation','تدوير المنتجات'],['Expiry','انتهاء الصلاحية'],['Not Filled','عدم تعبئة'],['Dust','أتربة'],['Damaged','تالف'],['Price Tag','بطاقة السعر'],['Out of Stock','نفاد المخزون'],['Planogram','مخطط الرف'],['Good Display','عرض ممتاز']];
+const txtCol = c => c === ANN_COLORS.red || c === ANN_COLORS.green ? '#ffffff' : '#111111';
 function arrowHead(x1, y1, x2, y2, s){
   const a = Math.atan2(y2-y1, x2-x1), L = s*4.2, W = s*2.6;
   const bx = x2 - L*Math.cos(a), by = y2 - L*Math.sin(a);
@@ -804,7 +843,7 @@ async function openEditor(i){
   const c = clips[i]; if (!c || !c.ready || !c.ok || busy) return;
   ED = { i, c, rot: c.rot || 0, ann: JSON.parse(JSON.stringify(c.ann || [])), hist: [], tool: 'ell', color: ANN_COLORS.red, label: LS.get('lastLabel', 'Rotation'), draft: null };
   $('ed').classList.add('on'); document.body.style.overflow = 'hidden';
-  $('edTitle').textContent = `${c.kind === 'v' ? 'Video' : 'Photo'} ${i+1} — mark issues`;
+  $('edTitle').textContent = `${c.kind === 'v' ? 'Video' : 'Photo'} ${i+1} · تحديد الملاحظات`;
   $('edScrub').classList.toggle('hidden', c.kind !== 'v');
   const box = $('edBox'); box.querySelectorAll('canvas,video').forEach(n => n.remove());
   if (c.kind === 'i'){
@@ -843,9 +882,10 @@ function edSyncUI(){
   document.querySelectorAll('#edTools [data-tool]').forEach(b => b.classList.toggle('on', b.dataset.tool === ED.tool));
   document.querySelectorAll('#edColors [data-col]').forEach(b => b.classList.toggle('on', ANN_COLORS[b.dataset.col] === ED.color));
   document.querySelectorAll('#edLabels [data-lbl]').forEach(b => b.classList.toggle('on', b.dataset.lbl === ED.label));
-  $('edHint').textContent = ED.tool === 'txt' ? 'Tap where the label should go'
-    : ED.tool === 'arr' ? 'Drag from the start to where the arrow should point'
-    : ED.label ? `Drag around the issue — an arrow and “${ED.label}” are added automatically` : 'Drag around the issue';
+  $('edHint').textContent = ED.tool === 'txt' ? 'Tap where the text should go · اضغط مكان الكتابة'
+    : ED.tool === 'arr' ? 'Drag from the start to the point · اسحب من البداية إلى المكان'
+    : ED.label ? `Drag around the issue — arrow + “${ED.label}” are added · اسحب بإصبعك حول المشكلة` : 'Drag around the issue · اسحب حول المشكلة';
+  const on = document.querySelector('#edLabels button.on'); if (on) on.scrollIntoView({ block:'nearest', inline:'nearest' });
 }
 function addCallout(shape){
   const [Wd, Hd] = edDims(), D = Math.max(Wd, Hd), s = shape.s;
@@ -906,10 +946,13 @@ function edClose(){ $('ed').classList.remove('on'); document.body.style.overflow
 function initEditor(){
   $('edTools').onclick = e => { const b = e.target.closest('[data-tool]'); if (b){ ED.tool = b.dataset.tool; edSyncUI(); } };
   $('edColors').onclick = e => { const b = e.target.closest('[data-col]'); if (b){ ED.color = ANN_COLORS[b.dataset.col]; edSyncUI(); } };
-  $('edLabels').innerHTML = ANN_LABELS.map(l => `<button type="button" data-lbl="${l}">${l}</button>`).join('') + `<button type="button" data-lbl="" title="Shape only">No label</button><button type="button" id="edCustom">+ Custom</button>`;
+  const chip = (en, ar) => `<button type="button" data-lbl="${esc(en)}"><b>${esc(en)}</b><small>${esc(ar)}</small></button>`;
+  $('edLabels').innerHTML = ANN_LABELS.map(l => chip(l[0], l[1])).join('') + JSON.parse(LS.get('customLabels', '[]')).map(t => chip(t, 'كلمتك')).join('')
+    + `<button type="button" data-lbl=""><b>No text</b><small>بدون كتابة</small></button><button type="button" id="edCustom"><b>+ Other</b><small>كلمة أخرى</small></button>`;
   $('edLabels').onclick = e => {
-    if (e.target.id === 'edCustom'){ const t = (prompt('Custom label (English)') || '').trim(); if (!t) return;
-      const b = document.createElement('button'); b.type = 'button'; b.dataset.lbl = t; b.textContent = t; e.target.before(b); ED.label = t; LS.set('lastLabel', t); return edSyncUI(); }
+    if (e.target.closest('#edCustom')){ const t = (prompt('Write the word in English / اكتب الكلمة بالإنجليزي') || '').trim(); if (!t) return;
+      const list = JSON.parse(LS.get('customLabels', '[]')); if (!list.includes(t)){ list.push(t); LS.set('customLabels', JSON.stringify(list.slice(-8))); }
+      e.target.closest('#edCustom').insertAdjacentHTML('beforebegin', chip(t, 'كلمتك')); ED.label = t; LS.set('lastLabel', t); return edSyncUI(); }
     const b = e.target.closest('[data-lbl]'); if (b){ ED.label = b.dataset.lbl; LS.set('lastLabel', ED.label); edSyncUI(); }
   };
   const svg = $('edSvg');
@@ -917,7 +960,7 @@ function initEditor(){
   svg.addEventListener('pointerup', edUp); svg.addEventListener('pointercancel', () => { if (ED){ ED.draft = null; edDraw(); } });
   $('edUndo').onclick = () => { if (ED.hist.length){ ED.ann = JSON.parse(ED.hist.pop()); edDraw(); } };
   $('edClear').onclick = () => { if (ED.ann.length){ edPush(); ED.ann = []; edDraw(); } };
-  $('edRotL').onclick = () => edRotate(-1); $('edRotR').onclick = () => edRotate(1);
+  $('edRotR').onclick = () => edRotate(1);
   $('edCancel').onclick = edClose; $('edDone').onclick = edDone;
   $('edRange').oninput = e => { if (ED && ED.media.tagName === 'VIDEO') ED.media.currentTime = +e.target.value; };
   addEventListener('resize', edLayout);
@@ -976,6 +1019,7 @@ async function go(){
             }catch(e){ console.warn(e); body = c.file; } }
           if (!rec){ const ext = (c.file.name.match(/\.(jpe?g|png|webp|gif)$/i)?.[1] || 'jpg').toLowerCase().replace('jpeg','jpg'); rec = { t:'i', f:`${idx}.${ext}`, w:c.w, h:c.h }; }
         } else rec = { t:'v', f:`${idx}.mp4`, w:c.w, h:c.h, dur:Math.round(c.dur||0), r:c.rot||0, a:c.ann && c.ann.length ? annSVG(c.ann) : '' };
+        rec.L = [...new Set((c.ann || []).filter(a => a.k === 'lbl' && a.t !== 'Good Display').map(a => a.t))];
         prog(doneBytes/totalBytes*.9, `Uploading ${c.kind === 'i' ? 'photo' : 'video'}${label}…`);
         const sha = await blobXHR(await b64(body), p => prog((doneBytes + p*c.file.size)/totalBytes*.9));
         doneBytes += c.file.size; rec.size = body.size;
@@ -993,7 +1037,7 @@ async function go(){
       made.push(page);
     }
     prog(.93, 'Creating page…');
-    entries.push(await saveManifest(), { path:'app/index.html', sha: await textBlob(SELF_HTML) });
+    entries.push(await saveManifest(), { path:(cfg.app || 'app') + '/index.html', sha: await textBlob(SELF_HTML) });
     await commit(entries, `Media: ${name}`);
     prog(1, 'Done ✓'); setTimeout(() => $('prog').classList.remove('on'), 800);
     showResult(made); renderLib();
@@ -1027,12 +1071,114 @@ function showResult(pages){
   $('res').innerHTML = `<div class="h"><b>${esc(title)}</b>${info ? `<span style="color:var(--ink2);font-size:13px">${info}</span>` : ''}<span class="badge wait" id="resBadge">Publishing…</span></div>
     ${pages.map(p => `<div class="lnk"><a href="${base()+p.slug}" target="_blank" rel="noopener">${esc(short()+p.slug)}</a><button class="btn sm" data-c="${base()+p.slug}" type="button">Copy</button></div>`).join('')}
     <div class="acts">
-      <a class="btn sm" href="mailto:?subject=${encodeURIComponent(m.s)}&body=${encodeURIComponent(m.b)}">Send by email</a>
+      <button class="btn sm" id="resMail" type="button">✉ Write email · كتابة الإيميل</button>
       <a class="btn sm wa" href="https://wa.me/?text=${encodeURIComponent(title + '\n' + m.links)}" target="_blank" rel="noopener">WhatsApp</a>
       ${pages.length > 1 ? `<button class="btn ghost sm" data-c="${esc(m.links)}" type="button">Copy all links</button>` : ''}
-      <button class="btn ghost sm" data-c="${esc(m.s + '\n\n' + m.b)}" type="button">Copy email text</button>
     </div>`;
+  $('resMail').onclick = () => openComposer(pages);
   $('res').classList.add('on'); $('res').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ---------- Email composer ---------- */
+const EM = {
+  greet: [['Dear Team,','الفريق'],['Dear All,','الجميع'],['Dear {N},','باسم شخص']],
+  purpose: [
+    { k:'visit', en:'Visit update', ar:'تحديث زيارة', subj:'{S} – Store Visit Update | {D}', open:[
+      ['Please find below the photos and videos from our recent visit to {S}.','مرفق صور وفيديوهات الزيارة الأخيرة'],
+      ['Sharing the latest store visit update for {S} for your kind review.','مشاركة آخر تحديث للزيارة للمراجعة'],
+      ['Please find the visual update from {S} at the link below.','التحديث المرئي من المتجر في الرابط'] ] },
+    { k:'issues', en:'Issues found', ar:'ملاحظات تحتاج إجراء', subj:'{S} – Points Requiring Action | {D}', open:[
+      ['During our visit to {S}, we observed some points that require your attention.','لاحظنا نقاط تحتاج اهتمامكم'],
+      ['Please note the issues identified at {S}, highlighted in the media below.','الملاحظات موضحة على الصور'],
+      ['We would like to bring to your attention the following observations at {S}.','نود لفت انتباهكم للملاحظات التالية'] ] },
+    { k:'promo', en:'Promotion / display', ar:'العرض الترويجي', subj:'{S} – Promotion & Display Execution | {D}', open:[
+      ['Please find the promotion and display execution at {S}.','تنفيذ العرض الترويجي في المتجر'],
+      ['Sharing the in-store promotion setup at {S} for your review.','تجهيز العرض داخل المتجر للمراجعة'],
+      ['We are pleased to share the new display executed at {S}.','يسعدنا مشاركة العرض الجديد'] ] },
+    { k:'fixed', en:'Before & after', ar:'قبل وبعد / تم الإصلاح', subj:'{S} – Corrective Actions Completed | {D}', open:[
+      ['Please find the before-and-after media for {S}, showing the corrective actions completed.','قبل وبعد مع الإجراءات المنفذة'],
+      ['Further to our previous email, the points at {S} have now been addressed as shown below.','بالإشارة لإيميلنا السابق تمت معالجة النقاط'] ] }
+  ],
+  req: [
+    ['Request feedback','طلب ملاحظاتكم','We would appreciate your feedback at your earliest convenience.'],
+    ['Request action','طلب إجراء تصحيحي','Kindly arrange the necessary corrective action and confirm once completed.'],
+    ['Request approval','طلب اعتماد','Kindly review and share your approval.'],
+    ['For information','للاطلاع فقط','This is shared for your information.']
+  ],
+  close: [
+    ['Thank you for your continuous support.','شكراً لدعمكم المستمر'],
+    ['Looking forward to your feedback.','بانتظار ملاحظاتكم'],
+    ['Thank you for your cooperation.','شكراً لتعاونكم'],
+    ['Appreciate your prompt attention to this matter.','نقدّر سرعة اهتمامكم']
+  ]
+};
+let MS = null;
+function mediaFacts(pages){
+  const name = pages.length > 1 ? pages[0].name.replace(/ — \d+$/, '') : pages[0].name;
+  const cl = pages.flatMap(p => p.clips), nV = cl.filter(c => (c.t||'v') === 'v').length, nI = cl.length - nV;
+  const counts = [nV ? (nV === 1 ? '1 video' : `${nV} videos`) : '', nI ? (nI === 1 ? '1 photo' : `${nI} photos`) : ''].filter(Boolean).join(' and ');
+  const tally = {}; cl.forEach(c => (c.L || []).forEach(l => tally[l] = (tally[l] || 0) + 1));
+  return { name, counts, issues: Object.entries(tally) };
+}
+function buildEmail(){
+  const f = mediaFacts(MS.pages), P = EM.purpose[MS.p], D = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  const fill = s => s.replace(/\{S\}/g, f.name).replace(/\{D\}/g, D).replace(/\{N\}/g, MS.name.trim() || 'Sir/Madam');
+  const lines = [fill(EM.greet[MS.g][0]), '', fill(P.open[Math.min(MS.o, P.open.length-1)][0]), ''];
+  if (f.issues.length){ lines.push('Points observed:'); f.issues.forEach(([l, n]) => lines.push(`  • ${l}${n > 1 ? ` (${n})` : ''}`)); lines.push(''); }
+  if (MS.pages.length === 1) lines.push(`You can view the ${f.counts} at the link below:`, base() + MS.pages[0].slug);
+  else { lines.push(`You can view the ${f.counts} at the links below:`); MS.pages.forEach((p, i) => lines.push(`${i+1}. ${base() + p.slug}`)); }
+  lines.push('', EM.req[MS.r][2], '', EM.close[MS.c][0], '', 'Best regards,');
+  ['sig_name','sig_title','sig_company','sig_phone'].forEach(k => { const v = LS.get(k).trim(); if (v) lines.push(v); });
+  return { s: fill(P.subj), b: lines.join('\n') };
+}
+function chipRow(key, items, cur, two){
+  return `<div class="mc-row" data-k="${key}">${items.map((it, i) => `<button type="button" class="mc${i === cur ? ' on' : ''}${two ? ' long' : ''}" data-i="${i}"><b>${esc(it[0])}</b><small>${esc(it[1])}</small></button>`).join('')}</div>`;
+}
+function renderComposer(keepText){
+  const P = EM.purpose[MS.p], f = mediaFacts(MS.pages);
+  const fillS = s => s.replace(/\{S\}/g, f.name);
+  $('mcBody').innerHTML = `
+    <div class="mc-sec"><div class="mc-h">Purpose <span>الغرض</span></div>${chipRow('p', EM.purpose.map(x => [x.en, x.ar]), MS.p)}</div>
+    <div class="mc-sec"><div class="mc-h">Greeting <span>التحية</span></div>${chipRow('g', EM.greet.map(g => [g[0].replace('{N}', '[Name]'), g[1]]), MS.g)}
+      <input type="text" id="mcName" class="${MS.g === 2 ? '' : 'hidden'}" placeholder="Name e.g. Mr. Ahmed" value="${esc(MS.name)}" dir="ltr"></div>
+    <div class="mc-sec"><div class="mc-h">Opening sentence <span>الجملة الافتتاحية</span></div>${chipRow('o', P.open.map(o => [fillS(o[0]), o[1]]), Math.min(MS.o, P.open.length-1), true)}</div>
+    <div class="mc-sec"><div class="mc-h">Request <span>الطلب</span></div>${chipRow('r', EM.req, MS.r)}</div>
+    <div class="mc-sec"><div class="mc-h">Closing <span>الختام</span></div>${chipRow('c', EM.close, MS.c)}</div>
+    <details class="mc-sec mc-sig"${LS.get('sig_name') ? '' : ' open'}><summary>Signature <span>التوقيع (يُحفظ)</span></summary>
+      <div class="mc-grid">
+        <input type="text" data-sig="sig_name" placeholder="Your name" value="${esc(LS.get('sig_name'))}" dir="ltr">
+        <input type="text" data-sig="sig_title" placeholder="Title e.g. Area Manager – Modern Trade" value="${esc(LS.get('sig_title'))}" dir="ltr">
+        <input type="text" data-sig="sig_company" placeholder="Company" value="${esc(LS.get('sig_company'))}" dir="ltr">
+        <input type="text" data-sig="sig_phone" placeholder="Mobile" value="${esc(LS.get('sig_phone'))}" dir="ltr">
+      </div></details>`;
+  if (!keepText){ const e = buildEmail(); $('mcSubj').value = e.s; $('mcText').value = e.b; }
+}
+function openComposer(pages){
+  const f = mediaFacts(pages);
+  MS = { pages, p: f.issues.length ? 1 : +LS.get('em_p', 0), g: +LS.get('em_g', 0), name: LS.get('em_name'), o: 0, r: +LS.get('em_r', 0), c: +LS.get('em_c', 0) };
+  if (MS.p >= EM.purpose.length) MS.p = 0;
+  renderComposer(); $('mail').classList.add('on'); document.body.style.overflow = 'hidden'; $('mail').scrollTop = 0;
+}
+function closeComposer(){ $('mail').classList.remove('on'); document.body.style.overflow = ''; }
+function initComposer(){
+  $('mcBody').addEventListener('click', e => {
+    const b = e.target.closest('.mc'); if (!b) return;
+    const k = b.parentElement.dataset.k, i = +b.dataset.i;
+    if (k === 'p'){ MS.p = i; MS.o = 0; LS.set('em_p', i); } else { MS[k] = i; if (k !== 'o') LS.set('em_' + k, i); }
+    renderComposer(); if (k === 'g' && i === 2) $('mcName').focus();
+  });
+  $('mcBody').addEventListener('input', e => {
+    if (e.target.id === 'mcName'){ MS.name = e.target.value; LS.set('em_name', MS.name); }
+    else if (e.target.dataset.sig) LS.set(e.target.dataset.sig, e.target.value);
+    else return;
+    const em = buildEmail(); $('mcSubj').value = em.s; $('mcText').value = em.b;
+  });
+  $('mcClose').onclick = closeComposer;
+  $('mcCopy').onclick = () => copy($('mcText').value);
+  $('mcCopyS').onclick = () => copy($('mcSubj').value);
+  $('mcOpen').onclick = () => { location.href = `mailto:?subject=${encodeURIComponent($('mcSubj').value)}&body=${encodeURIComponent($('mcText').value)}`; };
+  $('mcWa').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent($('mcText').value)}`, '_blank');
+  addEventListener('keydown', e => { if (e.key === 'Escape' && $('mail').classList.contains('on')) closeComposer(); });
 }
 
 /* ---------- Library ---------- */
@@ -1056,7 +1202,7 @@ async function libAction(e){
   const b = e.target.closest('button[data-a]'); if (!b) return;
   const p = manifest.pages.find(x => x.slug === b.dataset.s); if (!p) return;
   if (b.dataset.a === 'copy') return copy(base() + p.slug);
-  if (b.dataset.a === 'mail'){ const m = mail([p]); location.href = `mailto:?subject=${encodeURIComponent(m.s)}&body=${encodeURIComponent(m.b)}`; return; }
+  if (b.dataset.a === 'mail'){ openComposer([p]); return; }
   const ok = await ask('Delete this link?', `"${p.name}" will be deleted and the link will stop working.`, [{ label:'Delete', value:true, cls:'danger' }, { label:'Cancel', value:false, cls:'ghost' }]);
   if (!ok) return;
   b.disabled = true; b.textContent = '…';
@@ -1082,7 +1228,7 @@ async function showApp(){
 }
 function syncDns(){ const d = $('domain').value.trim(); $('dnsBox').classList.toggle('on', !!d); $('dnsCname').textContent = (cfg.owner || 'username').toLowerCase() + '.github.io'; }
 $('btnSetup').onclick = setup;
-$('btnSettings').onclick = () => { $('token').value = cfg.token||''; $('org').value = cfg.org||''; $('domain').value = cfg.domain||''; syncDns(); $('setupCard').classList.toggle('hidden'); };
+$('btnSettings').onclick = () => { if (cfg.app && cfg.owner) $('phoneLink').textContent = 'Phone link (private — keep for yourself): ' + base() + cfg.app + '/'; $('token').value = cfg.token||''; $('org').value = cfg.org||''; $('domain').value = cfg.domain||''; syncDns(); $('setupCard').classList.toggle('hidden'); };
 $('domain').oninput = syncDns;
 $('file').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
 $('clips').addEventListener('change', e => { if (e.target.type === 'file'){ addFiles(e.target.files); } });
@@ -1097,9 +1243,9 @@ $('btnGo').onclick = go;
 $('res').addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) copy(b.dataset.c); });
 $('q').oninput = renderLib;
 $('lib').onclick = libAction;
-initEditor();
+initEditor(); initComposer();
 if (EMBED) $('tokWrap').classList.add('hidden');
-const needsSetup = !cfg.owner || (cfg.repo || '').toLowerCase() !== siteRepo(cfg.owner).toLowerCase();
+const needsSetup = !cfg.owner || !cfg.app || (cfg.repo || '').toLowerCase() !== siteRepo(cfg.owner).toLowerCase();
 if (cfg.token && !needsSetup) showApp();
 else if (cfg.token || EMBED){ // first run, or moving from an older repo name: set up silently
   $('token').value = cfg.token || embTok();
