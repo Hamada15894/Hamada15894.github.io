@@ -297,7 +297,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
   <div class="mc-h" style="display:flex;align-items:center;gap:8px">Preview <span>المعاينة — تقدر تعدّل عليها</span><button type="button" class="btn ghost sm" id="mcRe" style="margin-left:auto">↻ Rephrase · صياغة أخرى</button></div>
   <input type="text" id="mcSubj" dir="ltr">
   <textarea id="mcText" dir="ltr" rows="15"></textarea>
-  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Send” opens Outlook with the address and subject, and copies the email in dark blue — just paste it (Ctrl+V) and press Send. · يفتح Outlook بالإيميل والعنوان، والنص منسوخ باللون الأزرق — الصقه بـ Ctrl+V واضغط إرسال</p>
+  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Send” opens Outlook with everything filled in. · زر الإرسال يفتح Outlook والإيميل مكتوب كامل مع الرابط.</p>
   <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Send · إرسال</button><button type="button" class="btn ghost" id="mcCopy">Copy (dark blue) · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
 </div></div>
 <div class="modal" id="modal"><div class="box"><h2 id="mT"></h2><p id="mP"></p><div class="acts" id="mA"></div></div></div>
@@ -1291,11 +1291,10 @@ function initComposer(){
   $('mcCopy').onclick = async () => { const ok = await copyRich($('mcText').value); toast(ok ? 'Copied in dark blue ✓ — paste with Ctrl+V' : 'Copy failed'); };
   $('mcCopyS').onclick = () => copy($('mcSubj').value);
   $('mcOpen').onclick = async () => {
-    const ok = await copyRich($('mcText').value);
-    toast(ok ? 'Email copied in dark blue — paste it with Ctrl+V' : 'Opening…');
+    toast('Opening your email app…');
     const to = $('mcTo').value.trim(), cc = $('mcCc').value.trim();
     const book = JSON.parse(LS.get('em_book','[]')); (to + ',' + cc).split(/[,;\s]+/).filter(a => /@/.test(a)).forEach(a => { if (!book.includes(a)) book.unshift(a); }); LS.set('em_book', JSON.stringify(book.slice(0, 20)));
-    const q = [`subject=${encodeURIComponent($('mcSubj').value)}`]; if (cc) q.push(`cc=${encodeURIComponent(cc)}`); if (!ok) q.push(`body=${encodeURIComponent($('mcText').value)}`);
+    const q = [`subject=${encodeURIComponent($('mcSubj').value)}`]; if (cc) q.push(`cc=${encodeURIComponent(cc)}`); q.push(`body=${encodeURIComponent($('mcText').value.replace(/\r?\n/g, '\r\n'))}`);
     setTimeout(() => { location.href = `mailto:${encodeURIComponent(to).replace(/%40/g,'@').replace(/%2C/g,',')}?` + q.join('&'); }, 350);
   };
   $('mcWa').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent($('mcText').value)}`, '_blank');
