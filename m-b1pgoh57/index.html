@@ -194,7 +194,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 #mcText:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 .mc-acts{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:#fff;padding:12px 0 calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:12px}
 .mc-acts .btn{flex:1;min-width:140px}
-.modal{position:fixed;inset:0;background:rgba(10,18,48,.45);display:none;place-items:center;padding:16px;z-index:10}
+.modal{position:fixed;inset:0;background:rgba(10,18,48,.45);display:none;place-items:center;padding:16px;z-index:40}
 .modal.on{display:grid}
 .modal .box{background:#fff;border-radius:18px;padding:22px;max-width:400px;width:100%}
 .modal .box p{margin:0 0 16px;color:var(--ink2);font-size:14px;white-space:pre-line;word-break:break-word}
@@ -306,7 +306,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
   <div class="mc-h" style="display:flex;align-items:center;gap:8px">Preview <span>المعاينة — تقدر تعدّل عليها</span><button type="button" class="btn ghost sm" id="mcRe" style="margin-left:auto">↻ Rephrase · صياغة أخرى</button></div>
   <input type="text" id="mcSubj" dir="ltr">
   <textarea id="mcText" dir="ltr" rows="15"></textarea>
-  <div class="mc-acts"><button type="button" class="btn" id="mcOpen" style="flex:2">✉ Send email · إرسال الإيميل</button><button type="button" class="btn ghost" id="mcCopy">Copy · نسخ</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
+  <div class="mc-acts"><button type="button" class="btn" id="mcOpen" style="flex:2">✉ Send email · إرسال الإيميل</button><button type="button" class="btn ghost" id="mcCopy">Copy · نسخ</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button><button type="button" id="mcHow" style="flex-basis:100%;background:none;border:0;color:var(--accent);font:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:2px">🎨 Make Outlook text dark blue · كيف أخلي خط Outlook أزرق غامق؟</button></div>
 </div></div>
 <div class="modal" id="modal"><div class="box"><h2 id="mT"></h2><p id="mP"></p><div class="acts" id="mA"></div></div></div>
 <div class="toast" id="toast"></div>
@@ -1336,6 +1336,9 @@ function initComposer(){
     const q = [`subject=${encodeURIComponent($('mcSubj').value)}`]; if (cc) q.push(`cc=${encodeURIComponent(cc)}`); q.push(`body=${encodeURIComponent($('mcText').value.replace(/\r?\n/g, '\r\n'))}`);
     setTimeout(() => { closeComposer(); location.href = `mailto:${encodeURIComponent(to).replace(/%40/g,'@').replace(/%2C/g,',')}?` + q.join('&'); }, 350);
   };
+  $('mcHow').onclick = () => ask('🎨 Dark blue text in Outlook (one time only)',
+    'سوّيها مرة وحدة بس، وبعدها كل إيميلاتك تطلع بالأزرق الغامق:\n\nOutlook (الكلاسيكي):\nFile ← Options ← Mail ← Stationery and Fonts ← New mail messages: Font… ← Font color: Dark Blue ← OK\n(ونفس الشي في Replying or forwarding messages)\n\nNew Outlook / Outlook Web:\nSettings ⚙ ← Mail ← Compose and reply ← Message format ← اختار لون الخط Dark Blue ← Save\n\nملاحظة: زر الإرسال يفتح الإيميل بخط Outlook الافتراضي، فهذا الإعداد هو اللي يخليه أزرق.',
+    [{ label:'OK · تمام', value:null }]);
   $('mcWa').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent($('mcText').value)}`, '_blank');
   addEventListener('keydown', e => { if (e.key === 'Escape' && $('mail').classList.contains('on')) closeComposer(); });
 }
