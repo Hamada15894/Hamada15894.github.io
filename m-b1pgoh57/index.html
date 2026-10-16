@@ -182,8 +182,8 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 .mc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media(max-width:560px){.mc-grid{grid-template-columns:1fr}}
 .mc-grid input,#mcSubj{padding:10px 12px}
-#mcSubj{margin-bottom:8px;font-weight:600}
-#mcText{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;font:13.5px/1.55 "Segoe UI",Arial,sans-serif;resize:vertical;color:var(--ink);outline:none}
+#mcSubj{margin-bottom:8px;font-weight:600;color:#002060}
+#mcText{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;font:14.5px/1.5 Calibri,"Segoe UI",Arial,sans-serif;resize:vertical;color:#002060;outline:none}
 #mcText:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
 .mc-acts{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:0;background:#fff;padding:12px 0 calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);margin-top:12px}
 .mc-acts .btn{flex:1;min-width:140px}
@@ -297,7 +297,8 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
   <div class="mc-h" style="display:flex;align-items:center;gap:8px">Preview <span>المعاينة — تقدر تعدّل عليها</span><button type="button" class="btn ghost sm" id="mcRe" style="margin-left:auto">↻ Rephrase · صياغة أخرى</button></div>
   <input type="text" id="mcSubj" dir="ltr">
   <textarea id="mcText" dir="ltr" rows="15"></textarea>
-  <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Open in Outlook / Mail</button><button type="button" class="btn ghost" id="mcCopy">Copy email · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
+  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Open in Outlook” copies the email in dark blue — just paste it (Ctrl+V) in the new email. · يفتح Outlook وينسخ الإيميل باللون الأزرق — الصقه بـ Ctrl+V</p>
+  <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Open in Outlook · افتح</button><button type="button" class="btn ghost" id="mcCopy">Copy (dark blue) · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
 </div></div>
 <div class="modal" id="modal"><div class="box"><h2 id="mT"></h2><p id="mP"></p><div class="acts" id="mA"></div></div></div>
 <div class="toast" id="toast"></div>
@@ -1092,41 +1093,79 @@ const ISS = {
   'Space Loss':   'Contracted shelf space taken by other brands – not recovered or reported',
   'Freezer':      'Ice cream freezer not maintained'
 };
+const MAIL_BLUE = '#002060';
 const EM = {
   purpose: [
-    { k:'esc',    en:'Escalation',        ar:'تصعيد',                 subj:'Escalation: {S} – Merchandising Standards' },
-    { k:'space',  en:'Shelf space lost',  ar:'فقدان المساحة',          subj:'Escalation: {S} – Contracted Shelf Space' },
-    { k:'repeat', en:'Second escalation', ar:'تصعيد ثاني – تكرار',      subj:'Second Escalation: {S} – Repeated Merchandising Gaps' },
-    { k:'good',   en:'Well done',         ar:'شكر وتقدير',             subj:'{S} – Excellent Execution' },
-    { k:'closed', en:'Correction noted',  ar:'تم التصحيح – شكراً',      subj:'{S} – Corrective Actions Noted' }
+    { k:'esc',    en:'Escalation',        ar:'تصعيد',               subj:'Escalation: {S} – Merchandising Standards' },
+    { k:'space',  en:'Shelf space lost',  ar:'فقدان المساحة',        subj:'Escalation: {S} – Contracted Shelf Space' },
+    { k:'repeat', en:'Second escalation', ar:'تصعيد ثاني – تكرار',    subj:'Second Escalation: {S} – Repeated Merchandising Gaps' },
+    { k:'good',   en:'Well done',         ar:'شكر وتقدير',           subj:'{S} – Excellent Execution' },
+    { k:'closed', en:'Correction noted',  ar:'تم التصحيح – شكراً',    subj:'{S} – Corrective Actions Noted' }
   ],
+  src: [['My visit','زيارتي أنا'],['Salesman visit','زيارة السيلزمان'],['Forwarding report','توجيه تقرير / إيميل']],
+  // open[type][source] -> variants ; standard length
   open: {
-    esc:    ["During today's visit to {S}, the following points were found below the agreed merchandising standards:",
-             "Please note the below gaps observed at {S} during today's visit:",
-             "I would like to escalate the following execution gaps observed at {S} today:"],
-    space:  ["During today's visit to {S}, we found that part of our contracted shelf space has been taken by other brands. It was neither recovered by the team nor reported to our salesman.",
-             "Today's visit to {S} showed that part of our contracted shelf space is now occupied by other brands, with no recovery or update shared with our salesman."],
-    repeat: ["Further to my previous email, the same points were observed again during today's visit to {S}:",
-             "Despite my earlier escalation, the following points remain unresolved at {S} as of today's visit:"],
-    good:   ["I would like to recognise the team's excellent execution at {S} during today's visit.",
-             "Well done on {S} – today's execution fully reflects the standard we expect."],
-    closed: ["Thank you for the quick action at {S}. The corrections are noted.",
-             "Well received – the corrective actions at {S} are noted with thanks."]
+    esc: [
+      ["During today's visit to {S}, the following points were found below the agreed merchandising standards:",
+       "Please note the below gaps observed at {S} during today's visit:",
+       "I would like to escalate the following execution gaps observed at {S} today:"],
+      ["During our salesman's visit to {S} today, the following points were found below the agreed merchandising standards:",
+       "Please note the below gaps reported by our salesman at {S} today:",
+       "Our salesman has reported the following execution gaps at {S}:"],
+      ["Please see the below report from our salesman regarding {S}. The following points need your immediate attention:",
+       "Forwarding the below for your action – the following gaps were reported at {S}:"] ],
+    space: [
+      ["During today's visit to {S}, we found that part of our contracted shelf space has been taken by other brands. It was neither recovered by the team nor reported to our salesman.",
+       "Today's visit to {S} showed that part of our contracted shelf space is now occupied by other brands, with no recovery or update shared with our salesman."],
+      ["Our salesman reported today that part of our contracted shelf space at {S} has been taken by other brands. It was neither recovered by the team nor reported to us.",
+       "As per our salesman's visit today, part of our contracted shelf space at {S} is now occupied by other brands, with no recovery or update shared."],
+      ["Please see the below report regarding {S}: part of our contracted shelf space has been taken by other brands, and it was neither recovered by the team nor reported to our salesman."] ],
+    repeat: [
+      ["Further to my previous email, the same points were observed again during today's visit to {S}:",
+       "Despite my earlier escalation, the following points remain unresolved at {S} as of today's visit:"],
+      ["Further to my previous email, our salesman has reported the same points again at {S}:",
+       "Despite my earlier escalation, our salesman reports that the following points remain unresolved at {S}:"],
+      ["Please see the below – the same points have been reported again at {S}, despite my previous escalation:"] ],
+    good: [
+      ["I would like to recognise the team's excellent execution at {S} during today's visit.", "Well done on {S} – today's execution fully reflects the standard we expect."],
+      ["Our salesman has shared the excellent execution at {S} today – well done to the team."],
+      ["Please see the below from our salesman – excellent execution at {S}. Well done to the team."] ],
+    closed: [
+      ["Thank you for the quick action at {S}. The corrections are noted.", "Well received – the corrective actions at {S} are noted with thanks."],
+      ["Our salesman has confirmed the corrections at {S}. Thank you for the quick action."],
+      ["Please see the below – the corrections at {S} are confirmed. Thank you for the quick action."] ]
+  },
+  // very short openers per source
+  short: {
+    esc:    ['Gaps found at {S} today:', 'Gaps reported by our salesman at {S} today:', 'Please see below – gaps reported at {S}:'],
+    space:  ['Our contracted shelf space at {S} has been taken by other brands – not recovered or reported.', 'Our salesman reports that our contracted shelf space at {S} has been taken by other brands – not recovered or reported.', 'Please see below – our contracted shelf space at {S} has been taken by other brands and was not recovered or reported.'],
+    repeat: ['Same points found again at {S} today:', 'Our salesman reports the same points again at {S}:', 'Please see below – same points reported again at {S}:'],
+    good:   ['Excellent execution at {S} today – well done.', 'Our salesman reports excellent execution at {S} – well done.', 'Please see below – excellent execution at {S}. Well done.'],
+    closed: ['Corrections at {S} noted – thank you.', 'Corrections at {S} confirmed by our salesman – thank you.', 'Please see below – corrections at {S} confirmed. Thank you.']
   },
   ask: ["Kindly ensure these are corrected {DL} and share the after photos for confirmation.",
         "Please have this rectified {DL} and confirm with after photos.",
         "We expect these points to be closed {DL}; kindly confirm with after photos."],
   askNoPhotos: ["Kindly ensure these are corrected {DL}.", "Please have this rectified {DL}.", "We expect these points to be closed {DL}."],
-  spaceAsk: ["Kindly ensure the full space is recovered {DL} and share the after photos for confirmation.",
-             "Please recover the full space {DL} and confirm with after photos."],
+  spaceAsk: ["Kindly ensure the full space is recovered {DL} and share the after photos for confirmation.", "Please recover the full space {DL} and confirm with after photos."],
   close: ["Thank you for your prompt support.", "Your prompt action is appreciated.", "Thank you for your cooperation."],
   deadline: [['Today','اليوم','by end of day today'],['24 hours','خلال 24 ساعة','within 24 hours'],['48 hours','خلال 48 ساعة','within 48 hours'],['Next visit','قبل الزيارة القادمة','before our next visit']],
-  asks: [['After photos','صور بعد التصحيح'],['Root cause','سبب المشكلة']],
+  // quick add-on lines (multi-select)
+  extra: [
+    ['After photos','صور بعد التصحيح'],
+    ['Feedback please','الرجاء الفيد باك','Please share your feedback.'],
+    ['Not acceptable','غير مقبول','This is not acceptable.'],
+    ['Repeated negligence','إهمال واضح ومتكرر','This reflects clear and repeated negligence.'],
+    ['Root cause','سبب المشكلة','We would also appreciate the root cause, to avoid a recurrence.'],
+    ['Urgent','عاجل','This requires your urgent attention.']
+  ],
+  len: [['Standard','عادي'],['Very short','مختصر جداً']],
   greet: [['Dear Team,','الفريق'],['Dear {N},','باسم شخص'],['Dear All,','الجميع']]
 };
 let MS = null;
 const P_ = () => EM.purpose[MS.p].k;
 const pick = (arr, v) => arr[v % arr.length];
+const isAct = () => ['esc','space','repeat'].includes(P_());
 function mediaFacts(pages){
   const name = pages.length > 1 ? pages[0].name.replace(/ — \d+$/, '') : pages[0].name;
   const cl = pages.flatMap(p => p.clips), nV = cl.filter(c => (c.t||'v') === 'v').length, nI = cl.length - nV;
@@ -1135,47 +1174,53 @@ function mediaFacts(pages){
   return { name, what, issues: Object.keys(tally).filter(l => l !== 'Good Display') };
 }
 function buildEmail(){
-  const f = mediaFacts(MS.pages), k = P_(), S = f.name, v = MS.v, DL = EM.deadline[MS.d][2];
+  const f = mediaFacts(MS.pages), k = P_(), S = f.name, v = MS.v, DL = EM.deadline[MS.d][2], x = MS.x, short = MS.l === 1;
   const fill = s => s.replace(/\{S\}/g, S).replace(/\{N\}/g, MS.name.trim() || 'Team').replace(/\{DL\}/g, DL);
   const date = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
   const link = MS.pages.length === 1 ? `${f.what}: ${base() + MS.pages[0].slug}` : [f.what + ':', ...MS.pages.map((p, i) => `${i+1}. ${base() + p.slug}`)].join('\n');
   const list = arr => arr.map((l, i) => `${i+1}. ${ISS[l] || l}`).join('\n');
-  const L = [fill(EM.greet[MS.g][0]), ''];
-  if (k === 'esc' || k === 'repeat'){
-    L.push(fill(pick(EM.open[k], v)), '');
-    L.push(f.issues.length ? list(f.issues) : '1. Merchandising standards not maintained (see photos)', '', link, '');
-    let ask = fill(pick(MS.a[0] ? EM.ask : EM.askNoPhotos, v));
-    if (MS.a[1]) ask += ' We would also appreciate the root cause, to avoid a recurrence.';
-    if (k === 'repeat') ask += ' Should these points recur, we will need to raise this at management level.';
-    L.push(ask, '', pick(EM.close, v));
-  } else if (k === 'space'){
-    L.push(fill(pick(EM.open.space, v)), '');
-    const others = f.issues.filter(l => l !== 'Space Loss');
-    if (others.length) L.push('Other points noted:', list(others), '');
+  const opener = fill(short ? EM.short[k][MS.s] : pick(EM.open[k][MS.s], v));
+  const L = [fill(EM.greet[MS.g][0]), '', opener, ''];
+  const tone = [];
+  if (x[2] && x[3]) tone.push('This is not acceptable and reflects clear and repeated negligence.');
+  else if (x[2]) tone.push(EM.extra[2][2]); else if (x[3]) tone.push(EM.extra[3][2]);
+  if (x[5]) tone.push(tone.length ? 'Your urgent attention is required.' : EM.extra[5][2]);
+  if (isAct()){
+    const items = k === 'space' ? f.issues.filter(l => l !== 'Space Loss') : (f.issues.length ? f.issues : ['Merchandising standards not maintained (see photos)']);
+    if (items.length){ if (k === 'space' && !short) L.push('Other points noted:'); L.push(list(items), ''); }
     L.push(link, '');
-    let ask = 'As this space is part of our trade agreement with the retailer, it must be protected at all times. ' + fill(pick(MS.a[0] ? EM.spaceAsk : EM.askNoPhotos, v));
-    if (MS.a[1]) ask += ' We would also appreciate the root cause, to avoid a recurrence.';
-    L.push(ask, '', pick(EM.close, v));
-  } else if (k === 'good'){
-    L.push(fill(pick(EM.open.good, v)), '', link, '', 'Please extend my thanks to the merchandiser and keep this standard consistent across all stores.', '', 'Thank you.');
+    let ask = short
+      ? `Please ${k === 'space' ? 'recover the full space' : 'correct'} ${DL}${x[0] ? ' and confirm with after photos' : ''}.`
+      : fill(pick(k === 'space' ? (x[0] ? EM.spaceAsk : EM.askNoPhotos) : (x[0] ? EM.ask : EM.askNoPhotos), v));
+    if (k === 'space' && !short) ask = 'As this space is part of our trade agreement with the retailer, it must be protected at all times. ' + ask;
+    const parts = [...tone, ask];
+    if (x[4]) parts.push(EM.extra[4][2]);
+    if (k === 'repeat') parts.push('Should these points recur, we will need to raise this at management level.');
+    if (x[1]) parts.push(EM.extra[1][2]);
+    L.push(parts.join(' '), '');
+    L.push(short ? 'Thank you.' : pick(EM.close, v));
   } else {
-    L.push(fill(pick(EM.open.closed, v)), '', link, '', 'Please ensure this standard is maintained going forward.', '', 'Thank you.');
+    L.push(link, '');
+    if (!short) L.push(k === 'good' ? 'Please extend my thanks to the merchandiser and keep this standard consistent across all stores.' : 'Please ensure this standard is maintained going forward.', '');
+    L.push('Thank you.');
   }
   L.push('', 'Best regards,');
-  ['sig_name','sig_title','sig_company','sig_phone'].forEach(x => { const s = LS.get(x).trim(); if (s) L.push(s); });
-  return { s: `${fill(EM.purpose[MS.p].subj)} | ${date}`, b: L.join('\n') };
+  ['sig_name','sig_title','sig_company','sig_phone'].forEach(q => { const s = LS.get(q).trim(); if (s) L.push(s); });
+  return { s: `${isAct() && x[5] ? 'URGENT – ' : ''}${fill(EM.purpose[MS.p].subj)} | ${date}`, b: L.join('\n') };
 }
 function chipRow(key, items, cur, multi){
   return `<div class="mc-row" data-k="${key}">${items.map((it, i) => `<button type="button" class="mc${(multi ? cur[i] : i === cur) ? ' on' : ''}" data-i="${i}"><b>${multi ? (cur[i] ? '✓ ' : '+ ') : ''}${esc(it[0])}</b><small>${esc(it[1])}</small></button>`).join('')}</div>`;
 }
 function renderComposer(){
-  const act = ['esc','space','repeat'].includes(P_());
+  const act = isAct();
   $('mcBody').innerHTML = `
     <div class="mc-sec"><div class="mc-h">Email type <span>نوع الإيميل</span></div>${chipRow('p', EM.purpose.map(x => [x.en, x.ar]), MS.p)}</div>
+    <div class="mc-sec"><div class="mc-h">Who visited <span>مين زار المتجر</span></div>${chipRow('s', EM.src, MS.s)}</div>
     <div class="mc-sec"><div class="mc-h">To <span>موجّه إلى</span></div>${chipRow('g', EM.greet.map(g => [g[0].replace('{N}', '[Name]'), g[1]]), MS.g)}
       <input type="text" id="mcName" class="${MS.g === 1 ? '' : 'hidden'}" placeholder="e.g. Mr. Khalid" value="${esc(MS.name)}" dir="ltr"></div>
     ${act ? `<div class="mc-sec"><div class="mc-h">Deadline <span>المهلة</span></div>${chipRow('d', EM.deadline, MS.d)}</div>
-    <div class="mc-sec"><div class="mc-h">Ask for <span>اطلب منهم</span></div>${chipRow('a', EM.asks, MS.a, true)}</div>` : ''}
+    <div class="mc-sec"><div class="mc-h">Add lines <span>أضف جمل — اضغط للإضافة أو الحذف</span></div>${chipRow('x', EM.extra, MS.x, true)}</div>` : ''}
+    <div class="mc-sec"><div class="mc-h">Length <span>الطول</span></div>${chipRow('l', EM.len, MS.l)}</div>
     <details class="mc-sec mc-sig"${LS.get('sig_name') ? '' : ' open'}><summary>Signature <span>التوقيع (يُحفظ)</span></summary>
       <div class="mc-grid">
         <input type="text" data-sig="sig_name" placeholder="Your name" value="${esc(LS.get('sig_name'))}" dir="ltr">
@@ -1188,16 +1233,34 @@ function renderComposer(){
 function openComposer(pages){
   const f = mediaFacts(pages), all = pages.flatMap(p => p.clips).flatMap(c => c.L || []);
   const p = f.issues.includes('Space Loss') ? 1 : f.issues.length ? 0 : all.includes('Good Display') ? 3 : 0;
-  let a; try{ a = JSON.parse(LS.get('em_a2', '[true,false]')); }catch(e){ a = [true,false]; }
-  MS = { pages, p, g: +LS.get('em_g', 0), name: LS.get('em_name'), d: +LS.get('em_d', 1), a, v: 0 };
+  let x; try{ x = JSON.parse(LS.get('em_x', '[true,true,false,false,false,false]')); }catch(e){ x = [true,true,false,false,false,false]; }
+  MS = { pages, p, s: +LS.get('em_s', 0), g: +LS.get('em_g', 0), name: LS.get('em_name'), d: +LS.get('em_d', 1), x, l: +LS.get('em_l', 0), v: 0 };
   renderComposer(); $('mail').classList.add('on'); document.body.style.overflow = 'hidden';
 }
 function closeComposer(){ $('mail').classList.remove('on'); document.body.style.overflow = ''; }
+/* rich (dark-blue) copy for Outlook / Gmail */
+function mailHTML(text){
+  const h = esc(text).replace(/(https?:\/\/[^\s<]+)/g, `<a href="$1" style="color:${MAIL_BLUE};text-decoration:underline">$1</a>`).replace(/\n/g, '<br>');
+  return `<div style="font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.4;color:${MAIL_BLUE}">${h}</div>`;
+}
+async function copyRich(text){
+  const html = mailHTML(text);
+  try{
+    await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type:'text/html' }), 'text/plain': new Blob([text], { type:'text/plain' }) })]);
+    return true;
+  }catch(e){
+    try{
+      const d = document.createElement('div'); d.contentEditable = 'true'; d.innerHTML = html; d.style.cssText = 'position:fixed;left:-9999px;top:0';
+      document.body.appendChild(d); const r = document.createRange(); r.selectNodeContents(d); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      const ok = document.execCommand('copy'); sel.removeAllRanges(); d.remove(); return ok;
+    }catch(e2){ return false; }
+  }
+}
 function initComposer(){
   $('mcBody').addEventListener('click', e => {
     const b = e.target.closest('.mc'); if (!b) return;
     const k = b.parentElement.dataset.k, i = +b.dataset.i;
-    if (k === 'a'){ MS.a[i] = !MS.a[i]; LS.set('em_a2', JSON.stringify(MS.a)); }
+    if (k === 'x'){ MS.x[i] = !MS.x[i]; LS.set('em_x', JSON.stringify(MS.x)); }
     else { MS[k] = i; MS.v = 0; if (k !== 'p') LS.set('em_' + k, i); }
     renderComposer(); if (k === 'g' && i === 1) $('mcName').focus();
   });
@@ -1209,9 +1272,13 @@ function initComposer(){
   });
   $('mcRe').onclick = () => { MS.v++; const em = buildEmail(); $('mcText').value = em.b; toast('New wording ✓'); };
   $('mcClose').onclick = closeComposer;
-  $('mcCopy').onclick = () => copy($('mcText').value);
+  $('mcCopy').onclick = async () => { const ok = await copyRich($('mcText').value); toast(ok ? 'Copied in dark blue ✓ — paste with Ctrl+V' : 'Copy failed'); };
   $('mcCopyS').onclick = () => copy($('mcSubj').value);
-  $('mcOpen').onclick = () => { location.href = `mailto:?subject=${encodeURIComponent($('mcSubj').value)}&body=${encodeURIComponent($('mcText').value)}`; };
+  $('mcOpen').onclick = async () => {
+    const ok = await copyRich($('mcText').value);
+    toast(ok ? 'Email copied in dark blue — paste it with Ctrl+V' : 'Opening…');
+    setTimeout(() => { location.href = `mailto:?subject=${encodeURIComponent($('mcSubj').value)}` + (ok ? '' : `&body=${encodeURIComponent($('mcText').value)}`); }, 350);
+  };
   $('mcWa').onclick = () => window.open(`https://wa.me/?text=${encodeURIComponent($('mcText').value)}`, '_blank');
   addEventListener('keydown', e => { if (e.key === 'Escape' && $('mail').classList.contains('on')) closeComposer(); });
 }
