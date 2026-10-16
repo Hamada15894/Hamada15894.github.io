@@ -297,8 +297,8 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent2)}
   <div class="mc-h" style="display:flex;align-items:center;gap:8px">Preview <span>المعاينة — تقدر تعدّل عليها</span><button type="button" class="btn ghost sm" id="mcRe" style="margin-left:auto">↻ Rephrase · صياغة أخرى</button></div>
   <input type="text" id="mcSubj" dir="ltr">
   <textarea id="mcText" dir="ltr" rows="15"></textarea>
-  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Send” opens Outlook with everything filled in. · زر الإرسال يفتح Outlook والإيميل مكتوب كامل مع الرابط.</p>
-  <div class="mc-acts"><button type="button" class="btn" id="mcOpen">✉ Send · إرسال</button><button type="button" class="btn ghost" id="mcCopy">Copy (dark blue) · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
+  <p class="hint" style="margin:6px 0 0;font-size:12px;color:var(--ink2)">“Send in dark blue” downloads the email — click the downloaded file and it opens in Outlook ready to send, in dark blue. · يحمّل الإيميل، اضغط على الملف اللي تحمّل ويفتح في Outlook جاهز باللون الأزرق الغامق، وبعدها اضغط Send.</p>
+  <div class="mc-acts"><button type="button" class="btn" id="mcBlue">✉ Send in dark blue · إرسال بالأزرق</button><button type="button" class="btn ghost" id="mcOpen">Quick send (no colour) · إرسال سريع</button><button type="button" class="btn ghost" id="mcCopy">Copy (dark blue) · نسخ</button><button type="button" class="btn ghost" id="mcCopyS">Copy subject</button><button type="button" class="btn wa" id="mcWa">WhatsApp</button></div>
 </div></div>
 <div class="modal" id="modal"><div class="box"><h2 id="mT"></h2><p id="mP"></p><div class="acts" id="mA"></div></div></div>
 <div class="toast" id="toast"></div>
@@ -1096,7 +1096,7 @@ const ISS = {
 const MAIL_BLUE = '#002060';
 const EM = {
   purpose: [
-    { k:'quick',  en:'Quick feedback',    ar:'طلب فيد باك سريع',     subj:'{S} – Photos & Videos for Review' },
+    { k:'quick',  en:'Quick escalation',  ar:'تصعيد سريع',           subj:'{S} – Merchandising Gaps' },
     { k:'esc',    en:'Escalation',        ar:'تصعيد',               subj:'Escalation: {S} – Merchandising Standards' },
     { k:'space',  en:'Shelf space lost',  ar:'فقدان المساحة',        subj:'Escalation: {S} – Contracted Shelf Space' },
     { k:'repeat', en:'Second escalation', ar:'تصعيد ثاني – تكرار',    subj:'Second Escalation: {S} – Repeated Merchandising Gaps' },
@@ -1162,14 +1162,19 @@ const EM = {
   ],
   len: [['Standard','عادي'],['Very short','مختصر جداً']],
   greet: [['Hello Team,','مرحبا فريق'],['Dear Team,','الفريق'],['Dear {N},','باسم شخص'],['Dear All,','الجميع']],
-  quick: ['Kindly review the attached photos and videos of {S} and share your feedback.', 'Please review the photos and videos of {S} below and share your feedback.', 'Kindly have a look at the attached photos and videos of {S} and share your feedback.']
+  quick: ["Please see the attached {W} from {S}, which {V} clear gaps in your team's execution.",
+          "The attached {W} from {S} {V2} shortfalls in your team's execution.",
+          "Please find the attached {W} from {S} showing the merchandising gaps by your team."],
+  quickFb:  ['Please share your feedback.', 'Your feedback is required.', 'Kindly share your feedback.'],
+  quickFbU: ['We need your feedback urgently.', 'Your urgent feedback is required.', 'Kindly share your feedback urgently.']
 };
 let MS = null;
 const P_ = () => EM.purpose[MS.p].k;
 const pick = (arr, v) => arr[v % arr.length];
 const isAct = () => ['esc','space','repeat'].includes(P_());
 function mediaFacts(pages){
-  const name = pages.length > 1 ? pages[0].name.replace(/ — \d+$/, '') : pages[0].name;
+  let name = pages.length > 1 ? pages[0].name.replace(/ — \d+$/, '') : pages[0].name;
+  if (name === name.toLowerCase()) name = name.replace(/\b[a-z]/g, c => c.toUpperCase());
   const cl = pages.flatMap(p => p.clips), nV = cl.filter(c => (c.t||'v') === 'v').length, nI = cl.length - nV;
   const what = nV && nI ? 'Photos and videos' : nI ? (nI > 1 ? 'Photos' : 'Photo') : (nV > 1 ? 'Videos' : 'Video');
   const tally = {}; cl.forEach(c => (c.L || []).forEach(l => tally[l] = (tally[l] || 0) + 1));
@@ -1183,10 +1188,9 @@ function buildEmail(){
   const list = arr => arr.map((l, i) => `${i+1}. ${ISS[l] || l}`).join('\n');
   const opener = k === 'quick' ? '' : fill(short ? EM.short[k][MS.s] : pick(EM.open[k][MS.s], v));
   if (k === 'quick'){
-    const what = f.what.toLowerCase();
-    let line = pick(EM.quick, v).replace('photos and videos', what).replace(/\{S\}/g, S);
-    if (MS.u) line = line.replace('share your feedback.', 'share your feedback urgently.');
-    const Q = [fill(EM.greet[MS.g][0]), '', line, '', link, '', 'Thank you.', '', 'Best regards,'];
+    const w = f.what.toLowerCase(), plural = /s$/.test(w);
+    const line = pick(EM.quick, v).replace('{W}', w).replace('{V}', plural ? 'show' : 'shows').replace('{V2}', plural ? 'highlight' : 'highlights').replace(/\{S\}/g, S);
+    const Q = [fill(EM.greet[MS.g][0]), '', line + ' ' + pick(MS.u ? EM.quickFbU : EM.quickFb, v), '', link, '', 'Thank you.', '', 'Best regards,'];
     ['sig_name','sig_title','sig_company','sig_phone'].forEach(q => { const s2 = LS.get(q).trim(); if (s2) Q.push(s2); });
     return { s: `${MS.u ? 'URGENT – ' : ''}${fill(EM.purpose[MS.p].subj)} | ${date}`, b: Q.join('\n') };
   }
@@ -1290,10 +1294,21 @@ function initComposer(){
   $('mcClose').onclick = closeComposer;
   $('mcCopy').onclick = async () => { const ok = await copyRich($('mcText').value); toast(ok ? 'Copied in dark blue ✓ — paste with Ctrl+V' : 'Copy failed'); };
   $('mcCopyS').onclick = () => copy($('mcSubj').value);
+  const saveBook = (to, cc) => { const book = JSON.parse(LS.get('em_book','[]')); (to + ',' + cc).split(/[,;\s]+/).filter(a => /@/.test(a)).forEach(a => { if (!book.includes(a)) book.unshift(a); }); LS.set('em_book', JSON.stringify(book.slice(0, 20))); };
+  const b64u = str => { const by = new TextEncoder().encode(str); let bin = ''; by.forEach(c => bin += String.fromCharCode(c)); return btoa(bin); };
+  $('mcBlue').onclick = () => {
+    const to = $('mcTo').value.trim(), cc = $('mcCc').value.trim(), subj = $('mcSubj').value; saveBook(to, cc);
+    const html = `<html><head><meta charset="utf-8"></head><body>${mailHTML($('mcText').value)}</body></html>`;
+    const eml = [ to ? `To: ${to}` : 'To: ', cc ? `Cc: ${cc}` : null, `Subject: =?UTF-8?B?${b64u(subj)}?=`, 'X-Unsent: 1', 'MIME-Version: 1.0',
+      'Content-Type: text/html; charset="UTF-8"', 'Content-Transfer-Encoding: base64', '', b64u(html).replace(/.{76}/g, '$&\r\n') ].filter(l => l !== null).join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([eml], { type:'message/rfc822' }));
+    a.download = (MS.pages[0].slug || 'email') + '.eml'; document.body.appendChild(a); a.click(); a.remove();
+    toast('Email ready — open the downloaded file to send it from Outlook');
+  };
   $('mcOpen').onclick = async () => {
     toast('Opening your email app…');
     const to = $('mcTo').value.trim(), cc = $('mcCc').value.trim();
-    const book = JSON.parse(LS.get('em_book','[]')); (to + ',' + cc).split(/[,;\s]+/).filter(a => /@/.test(a)).forEach(a => { if (!book.includes(a)) book.unshift(a); }); LS.set('em_book', JSON.stringify(book.slice(0, 20)));
+    saveBook(to, cc);
     const q = [`subject=${encodeURIComponent($('mcSubj').value)}`]; if (cc) q.push(`cc=${encodeURIComponent(cc)}`); q.push(`body=${encodeURIComponent($('mcText').value.replace(/\r?\n/g, '\r\n'))}`);
     setTimeout(() => { location.href = `mailto:${encodeURIComponent(to).replace(/%40/g,'@').replace(/%2C/g,',')}?` + q.join('&'); }, 350);
   };
